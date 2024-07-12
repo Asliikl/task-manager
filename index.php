@@ -9,68 +9,121 @@
 </head>
 
 <body>
+    <?php
+    include "db.php";
+    /*
+        if($_GET['durum']=="ok"){
+            echo "Succesful save";
+        }
+        else{
+            echo "Failed save";
+        }
+    */
+    ?>
     <div class="container">
         <div class="panel">
-            <div class="div1">
-                <form action="">
-                    <label for="staff">Select Staff</label>
-                    <select name="staff" id="staff">
-                        <option value="1">1</option>
-                        <option value="2">2</option>
+            <div class="addTask">
+                <form method="post" action="islem.php">
+                    <label for="staff_id">Select Staff</label>
+                    <select name="staff_id">
+                        <?php
+                        $data = $db->query("SELECT * FROM staff")->fetchAll();
+                        foreach ($data as $row) { ?>
+                            <option value="<?php echo $row['id'] ?>"> <?php echo $row['staff_name'] ?></option>
+                        <?php } ?>
+
                     </select>
 
                     <label for="task">Task Name</label>
-                    <textarea name="task" id="task" placeholder="up to 100 characters" rows="4"></textarea>
+                    <textarea name="task_name" id="task" placeholder="up to 100 characters" rows="4"></textarea>
 
                     <label for="status">Select Status</label>
-                    <select name="status" id="status">
-                        <option value="1">TO DO</option>
-                        <option value="2">IN PROGRESS</option>
-                        <option>DONE</option>
+                    <select name="status_id">
+                        <?php
+                        $statuses = $db->query("SELECT * FROM status")->fetchAll();
+                        foreach ($statuses as $status) : ?>
+                            <option value="<?= $status['id'] ?>"><?= $status['status'] ?></option>
+                        <?php endforeach; ?>
                     </select>
 
-                    <button type="submit">Save</button>
+                    <button type="submit" name="insert_task">Save</button>
                 </form>
             </div>
-            <div class="div2">
-                <form action="">
+            <div class="addStaff">
+                <form action="islem.php" method="POST">
                     <label for="">Add Name Staff</label>
-                    <input type="text">
-                    <button type="submit">Save</button>
+                    <input type="text" name="staff_name" placeholder="">
+                    <button type="submit" name="insert_staff">Save</button>
                 </form>
             </div>
         </div>
+
         <div class="panel mid-panel">
             <div>
                 <p style="background-color:#007bff;">TO DO</p>
-                <div class="div2">
-                    <div>Staff<a href="">1</a><a href="">2</a><a href="">3</a></div>
-                    <div>task</div>
-                    <div>Created Date</div>
+                <div class="taskStatus">
+                    <?php
+                    $status_data = $db->prepare("SELECT * from tasks 
+                    inner join staff ON tasks.staff_id=staff.id
+                    WHERE status_id='1'");
+                    $status_data->execute();
+                    while ($statusdatacek = $status_data->fetch(PDO::FETCH_ASSOC)) { ?>
+                        <div class="statusContent">
+                            <div class="stafName"><?php echo $statusdatacek['staff_name'] ?>
+                                <div class="actions">
+                                    <a href="edit.php?id=<?php echo $statusdatacek['id'] ?>">E</a>
+                                    <a href="">D</a>
+                                    <a href="">A</a>
+                                </div>
+                            </div>
+                            <div class="taskContent"><?php echo $statusdatacek['task_name'] ?></div>
+                            <div class="date">Created Date: <?php echo $statusdatacek['created_date'] ?> &nbsp;</div>
+                        </div>
+                    <?php } ?>
                 </div>
-
             </div>
+
+
             <div>
                 <p style="background-color:#28a745;">IN PROGRESS</p>
-                <div class="div2">
-                    <div>Staff<a href="">1</a><a href="">2</a><a href="">3</a></div>
-                    <div>task</div>
-                    <div>Created Date</div>
+                <div class="taskStatus">
+                    <?php
+                    $status_data = $db->prepare("SELECT * from tasks
+                     inner join staff ON tasks.staff_id=staff.id
+                     WHERE status_id='2'");
+                    $status_data->execute();
+                    while ($statusdatacek = $status_data->fetch(PDO::FETCH_ASSOC)) { ?>
+                        <div class="statusContent">
+                            <div class="stafName"><?php echo $statusdatacek['staff_name'] ?></div>
+                            <div class="taskContent"><?php echo $statusdatacek['task_name'] ?></div>
+                            <div class="date">Created Date: <?php echo $statusdatacek['created_date'] ?> &nbsp;</div>
+                        </div>
+                    <?php } ?>
                 </div>
             </div>
+
             <div>
                 <p style="background-color:#707070;">DONE</p>
-                <div class="div2">
-                    <div>Staff<a href="">1</a><a href="">2</a><a href="">3</a></div>
-                    <div>task</div>
-                    <div>Created Date</div>
+                <div class="taskStatus">
+                    <?php
+                    $status_data = $db->prepare("SELECT * from tasks
+                     inner join staff ON tasks.staff_id=staff.id
+                      WHERE status_id='3'");
+                    $status_data->execute();
+                    while ($statusdatacek = $status_data->fetch(PDO::FETCH_ASSOC)) { ?>
+                        <div class="statusContent">
+                            <div class="stafName"><?php echo $statusdatacek['staff_name'] ?></div>
+                            <div class="taskContent"><?php echo $statusdatacek['task_name'] ?></div>
+                            <div class="date">Created Date: <?php echo $statusdatacek['created_date'] ?> &nbsp;</div>
+                        </div>
+                    <?php } ?>
                 </div>
             </div>
         </div>
         <div class="panel">
             <button type="submit">Show Archieve</button>
-            <div class="div1">DONE + ARCHIEVE</div>
-            <div class="div2">
+            <div class="addTask">DONE + ARCHIEVE</div>
+            <div class="addStaff">
                 <table>
                     <tr>Top 5 Staff </tr>
                     <td>Ahmet Yılmaz</td>
