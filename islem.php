@@ -18,9 +18,23 @@ if (isset($_POST['insert_staff'])) {
 }
 
 
-// insert_task yapılacak
 if (isset($_POST['insert_task'])) {
    if (isset($_POST['staff_id']) && isset($_POST['status_id'])) {
+      $isStaffExist = $db->prepare("SELECT * from staff where id = :id");
+      $isStaffExist->execute(array(
+          'id' => $_POST['staff_id']
+      ));
+      $isStaffExistResult = $isStaffExist->fetch(PDO::FETCH_ASSOC);
+
+      $isStatusExist = $db->prepare("SELECT * from status where id = :id");
+      $isStatusExist->execute(array(
+          'id' => $_POST['status_id']
+      ));
+      $isStatusExistResult = $isStatusExist->fetch(PDO::FETCH_ASSOC);
+      if(!$isStatusExistResult || !$isStaffExistResult){
+         header("Location: index.php?status=error");
+      }
+      //formda 1-2-3-4 id li gösteririp elle 999 yazar post eder. bunu önlemek için güvenliğini böyle yapman lazım
       $staff_id = $_POST['staff_id'];
       $status_id = $_POST['status_id'];
 
@@ -46,3 +60,43 @@ if (isset($_POST['insert_task'])) {
       echo "there is no such data";
    }
 }
+
+
+if(isset($_POST['update_task'])){
+   //gelen staff id ve status id yi veritabanında sorgula, eğer yoksa hata verdir.
+   $update_task = $db->prepare("UPDATE tasks SET
+   task_name=:task_name,
+   staff_id=:staff_id,
+   status_id=:status_id,
+   created_date=:created_date	
+    WHERE id = :task_id
+");
+   $update = $update_task->execute(array(
+      'task_name' => $_POST['task_name'],
+      'staff_id' => $_POST['staff_id'],
+      'status_id' => $_POST['status_id'],
+      'created_date' =>$_POST['created_date'],
+      'task_id' => $_POST['task_id']
+   ));
+   if ($update) {
+      header("Location:index.php?durum=ok");
+      exit();
+   } else {
+      header("Location:index.php?durum=no");
+   }
+} 
+
+if(isset($_GET['delete_task'])) {
+   $delete_task = $db->prepare("DELETE FROM tasks WHERE id = :task_id");
+   $delete = $delete_task->execute(array(
+      'task_id' => $_GET['task_id']
+   ));
+   if ($delete) {
+      header("Location: index.php?durum=ok");
+      exit();
+   } else {
+      header("Location: index.php?durum=no");
+      exit(); 
+   }
+}
+

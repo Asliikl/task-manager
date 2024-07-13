@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Three Panels Layout</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 <body>
@@ -63,17 +64,17 @@
                 <p style="background-color:#007bff;">TO DO</p>
                 <div class="taskStatus">
                     <?php
-                    $status_data = $db->prepare("SELECT * from tasks 
+                    $status_data = $db->prepare("SELECT *,tasks.id as task_id from tasks 
                     inner join staff ON tasks.staff_id=staff.id
-                    WHERE status_id='1'");
+                    WHERE tasks.status_id='1'");
                     $status_data->execute();
                     while ($statusdatacek = $status_data->fetch(PDO::FETCH_ASSOC)) { ?>
                         <div class="statusContent">
                             <div class="stafName"><?php echo $statusdatacek['staff_name'] ?>
                                 <div class="actions">
-                                    <a href="edit.php?id=<?php echo $statusdatacek['id'] ?>">E</a>
-                                    <a href="">D</a>
-                                    <a href="">A</a>
+                                    <a href="edit.php?id=<?php echo $statusdatacek['task_id'] ?>"><i class="fa fa-edit" style="color: green;"></i></a>
+                                    <a href=""><i class="fa fa-remove" style="color: red;"></i></a>
+                                    <a href=""><i class="fa fa-archive"></i></a>
                                 </div>
                             </div>
                             <div class="taskContent"><?php echo $statusdatacek['task_name'] ?></div>
@@ -88,14 +89,20 @@
                 <p style="background-color:#28a745;">IN PROGRESS</p>
                 <div class="taskStatus">
                     <?php
-                    $status_data = $db->prepare("SELECT * from tasks
-                     inner join staff ON tasks.staff_id=staff.id
-                     WHERE status_id='2'");
+                    $status_data = $db->prepare("SELECT *,tasks.id as task_id from tasks 
+                   inner join staff ON tasks.staff_id=staff.id
+                   WHERE tasks.status_id='2'");
                     $status_data->execute();
                     while ($statusdatacek = $status_data->fetch(PDO::FETCH_ASSOC)) { ?>
                         <div class="statusContent">
-                            <div class="stafName"><?php echo $statusdatacek['staff_name'] ?></div>
-                            <div class="taskContent"><?php echo $statusdatacek['task_name'] ?></div>
+                            <div class="stafName"><?php echo $statusdatacek['staff_name'] ?>
+                            <div class="actions">
+                                    <a href="edit.php?id=<?php echo $statusdatacek['task_id'] ?>"><i class="fa fa-edit" style="color: green;"></i></a>
+                                    <a href=""><i class="fa fa-remove" style="color: red;"></i></a>
+                                    <a href=""><i class="fa fa-archive"></i></a>
+                                </div></div>
+                            <div class="taskContent"><?php echo $statusdatacek['task_name'] ?>
+                            </div>
                             <div class="date">Created Date: <?php echo $statusdatacek['created_date'] ?> &nbsp;</div>
                         </div>
                     <?php } ?>
@@ -106,14 +113,21 @@
                 <p style="background-color:#707070;">DONE</p>
                 <div class="taskStatus">
                     <?php
-                    $status_data = $db->prepare("SELECT * from tasks
-                     inner join staff ON tasks.staff_id=staff.id
-                      WHERE status_id='3'");
+                    $status_data = $db->prepare("SELECT *,tasks.id as task_id from tasks 
+                    inner join staff ON tasks.staff_id=staff.id
+                    WHERE tasks.status_id='3'");
                     $status_data->execute();
                     while ($statusdatacek = $status_data->fetch(PDO::FETCH_ASSOC)) { ?>
                         <div class="statusContent">
-                            <div class="stafName"><?php echo $statusdatacek['staff_name'] ?></div>
-                            <div class="taskContent"><?php echo $statusdatacek['task_name'] ?></div>
+                            <div class="stafName"><?php echo $statusdatacek['staff_name'] ?>
+                                <div class="actions">
+                                    <a href="edit.php?id=<?php echo $statusdatacek['task_id'] ?>"><i class="fa fa-edit" style="color: green;"></i></a>
+                                    <a href="islem.php?id=<?php echo $statusdatacek['task_id'] ?>&type=delete_task"><i class="fa fa-remove" style="color: red;"></i></a>
+                                    <a href=""><i class="fa fa-archive"></i></a>
+                                </div>
+                            </div>
+                            <div class="taskContent"><?php echo $statusdatacek['task_name'] ?>
+                            </div>
                             <div class="date">Created Date: <?php echo $statusdatacek['created_date'] ?> &nbsp;</div>
                         </div>
                     <?php } ?>

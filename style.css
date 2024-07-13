@@ -25,7 +25,15 @@ body {
     border-radius: 5px;
     flex: 1;
 }
-
+.editPanel{
+    display: flex;
+    flex-direction: column;
+    background-color: #222831;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+ 
+}
 .mid-panel {
     display: flex;
     flex-direction: row;
