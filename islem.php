@@ -86,17 +86,30 @@ if(isset($_POST['update_task'])){
    }
 } 
 
-if(isset($_GET['delete_task'])) {
-   $delete_task = $db->prepare("DELETE FROM tasks WHERE id = :task_id");
+if(isset($_GET['type']) && $_GET['type'] == 'delete_task' && isset($_GET['id'])) {
+   $delete_task = $db->prepare("DELETE FROM tasks WHERE id = :id");
    $delete = $delete_task->execute(array(
-      'task_id' => $_GET['task_id']
+       'id' => $_GET['id']
    ));
    if ($delete) {
-      header("Location: index.php?durum=ok");
-      exit();
+       header("Location: index.php?durum=ok");
+       exit();
    } else {
-      header("Location: index.php?durum=no");
-      exit(); 
+       header("Location: index.php?durum=no");
+       exit(); 
    }
 }
-
+if(isset($_GET['type']) && $_GET['type'] == 'archive_task' && isset($_GET['id'])) {
+   $archive_task = $db->prepare("UPDATE tasks SET status_id = 4 WHERE id = :id");
+   $archive = $archive_task->execute(array(
+       'id' => $_GET['id']
+   ));
+   if ($archive) {
+       header("Location: index.php?durum=ok");
+       exit();
+   } else {
+       header("Location: index.php?durum=no");
+       exit();
+   }
+} 
+?>

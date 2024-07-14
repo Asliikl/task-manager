@@ -73,8 +73,8 @@
                             <div class="stafName"><?php echo $statusdatacek['staff_name'] ?>
                                 <div class="actions">
                                     <a href="edit.php?id=<?php echo $statusdatacek['task_id'] ?>"><i class="fa fa-edit" style="color: green;"></i></a>
-                                    <a href=""><i class="fa fa-remove" style="color: red;"></i></a>
-                                    <a href=""><i class="fa fa-archive"></i></a>
+                                    <a href="islem.php?id=<?php echo $statusdatacek['task_id'] ?>&type=delete_task" onclick="return confirm('Are you sure you want to delete this task?');"><i class="fa fa-remove" style="color: red;"></i></a>
+                                    <a href="islem.php?id=<?php echo $statusdatacek['task_id'] ?>&type=archive_task" onclick="return confirm('Are you sure you want to archive this task?');"><i class="fa fa-archive"></i></a>
                                 </div>
                             </div>
                             <div class="taskContent"><?php echo $statusdatacek['task_name'] ?></div>
@@ -83,7 +83,6 @@
                     <?php } ?>
                 </div>
             </div>
-
 
             <div>
                 <p style="background-color:#28a745;">IN PROGRESS</p>
@@ -96,11 +95,12 @@
                     while ($statusdatacek = $status_data->fetch(PDO::FETCH_ASSOC)) { ?>
                         <div class="statusContent">
                             <div class="stafName"><?php echo $statusdatacek['staff_name'] ?>
-                            <div class="actions">
+                                <div class="actions">
                                     <a href="edit.php?id=<?php echo $statusdatacek['task_id'] ?>"><i class="fa fa-edit" style="color: green;"></i></a>
-                                    <a href=""><i class="fa fa-remove" style="color: red;"></i></a>
-                                    <a href=""><i class="fa fa-archive"></i></a>
-                                </div></div>
+                                    <a href="islem.php?id=<?php echo $statusdatacek['task_id'] ?>&type=delete_task" onclick="return confirm('Are you sure you want to delete this task?');"><i class="fa fa-remove" style="color: red;"></i></a>
+                                    <a href="islem.php?id=<?php echo $statusdatacek['task_id'] ?>&type=archive_task" onclick="return confirm('Are you sure you want to archive this task?');"><i class="fa fa-archive"></i></a>
+                                </div>
+                            </div>
                             <div class="taskContent"><?php echo $statusdatacek['task_name'] ?>
                             </div>
                             <div class="date">Created Date: <?php echo $statusdatacek['created_date'] ?> &nbsp;</div>
@@ -122,8 +122,8 @@
                             <div class="stafName"><?php echo $statusdatacek['staff_name'] ?>
                                 <div class="actions">
                                     <a href="edit.php?id=<?php echo $statusdatacek['task_id'] ?>"><i class="fa fa-edit" style="color: green;"></i></a>
-                                    <a href="islem.php?id=<?php echo $statusdatacek['task_id'] ?>&type=delete_task"><i class="fa fa-remove" style="color: red;"></i></a>
-                                    <a href=""><i class="fa fa-archive"></i></a>
+                                    <a href="islem.php?id=<?php echo $statusdatacek['task_id'] ?>&type=delete_task" onclick="return confirm('Are you sure you want to delete this task?');"><i class="fa fa-remove" style="color: red;"></i></a>
+                                    <a href="islem.php?id=<?php echo $statusdatacek['task_id'] ?>&type=archive_task" onclick="return confirm('Are you sure you want to archive this task?');"><i class="fa fa-archive"></i></a>
                                 </div>
                             </div>
                             <div class="taskContent"><?php echo $statusdatacek['task_name'] ?>
@@ -135,7 +135,7 @@
             </div>
         </div>
         <div class="panel">
-            <button type="submit">Show Archieve</button>
+            <button type="button" onclick="window.location.href='archive.php'">Show Archive</button>
             <div class="addTask">DONE + ARCHIEVE</div>
             <div class="addStaff">
                 <table>
