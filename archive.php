@@ -72,13 +72,13 @@
 </head>
 
 <?php
-    include 'db.php';
-    $archived_tasks = $db->prepare("SELECT *, tasks.id as task_id FROM tasks 
+include 'db.php';
+$archived_tasks = $db->prepare("SELECT *, tasks.id as task_id FROM tasks 
                                     INNER JOIN staff ON tasks.staff_id = staff.id
                                     WHERE tasks.status_id = :status_id");
-    $archived_tasks->execute(array(
-        'status_id' => 4
-    ));
+$archived_tasks->execute(array(
+    'status_id' => 4
+));
 ?>
 
 <body>

@@ -24,16 +24,19 @@ body {
     padding: 10px;
     border-radius: 5px;
     flex: 1;
+    margin-bottom: 3px;
 }
-.editPanel{
+
+.editPanel {
     display: flex;
     flex-direction: column;
     background-color: #222831;
     color: white;
     padding: 10px;
     border-radius: 5px;
- 
+
 }
+
 .mid-panel {
     display: flex;
     flex-direction: row;
@@ -140,6 +143,11 @@ button:hover {
 
 @media (max-width: 768px) {
     .container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .mid-panel {
         flex-direction: column;
         align-items: center;
     }

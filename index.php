@@ -41,7 +41,7 @@
                     <label for="status">Select Status</label>
                     <select name="status_id">
                         <?php
-                        $statuses = $db->query("SELECT * FROM status")->fetchAll();
+                        $statuses = $db->query("SELECT * FROM status WHERE id != 4")->fetchAll();
                         foreach ($statuses as $status) : ?>
                             <option value="<?= $status['id'] ?>"><?= $status['status'] ?></option>
                         <?php endforeach; ?>
@@ -136,15 +136,26 @@
         </div>
         <div class="panel">
             <button type="button" onclick="window.location.href='archive.php'">Show Archive</button>
-            <div class="addTask">DONE + ARCHIEVE</div>
             <div class="addStaff">
-                <table>
-                    <tr>Top 5 Staff </tr>
-                    <td>Ahmet Yılmaz</td>
-                </table>
+                Top 5 Staff
+                <hr>
+                <?php
+                $top = $db->prepare("SELECT staff.staff_name, COUNT(tasks.id) as completed_tasks
+                         FROM tasks
+                         INNER JOIN staff ON tasks.staff_id = staff.id
+                         WHERE tasks.status_id = 3
+                         GROUP BY tasks.staff_id
+                         ORDER BY completed_tasks DESC
+                         LIMIT 5");
+                $top->execute();
+                while ($topStatus = $top->fetch(PDO::FETCH_ASSOC)) { ?>
+                    <ul>
+                        <li><?php echo $topStatus['staff_name'] ?></li>
+                    </ul>
+                <?php } ?>
+
             </div>
         </div>
-    </div>
 </body>
 
 </html>
