@@ -10,19 +10,22 @@
 
 <body>
     <?php
-    include "db.php";
+    require_once "db.php";
+    require "functions.php";
 
-    $data = $db->prepare("SELECT tasks.*, staff.staff_name, status.status
-    FROM tasks
-    INNER JOIN staff ON tasks.staff_id = staff.id
-    INNER JOIN status ON tasks.status_id = status.id
-    WHERE tasks.id = :id");
-    $data->execute(array(
-        'id' => $_GET['id']
-    ));
-    $datacek = $data->fetch(PDO::FETCH_ASSOC);
-    if (!$datacek) {
-        header('Location: index.php');
+
+
+    if (isset($_GET['id']) && !empty($_GET['id'])) {
+        $task_id = $_GET['id'];
+
+        $datacek = getTaskByID($task_id);
+        if (!$datacek) {
+            header('Location: index.php');
+            exit();
+        }
+    } else {
+        echo "Task ID is missing.";
+        exit();
     }
     ?>
 
@@ -33,9 +36,8 @@
                     <label for="staff_id">Select Staff</label>
                     <select name="staff_id">
                         <?php
-                        $data = $db->query("SELECT * FROM staff")->fetchAll();
-                        foreach ($data as $row) { ?>
-                            <option <?php if ($row['id'] == $datacek['staff_id']) { ?> selected <?php } else { ?><?php } ?> value="<?php echo $row['id'] ?>"> <?php echo $row['staff_name'] ?></option>
+                        foreach (getStaffs() as $staff) { ?>
+                            <option <?php if ($staff['id'] == $datacek['staff_id']) { ?> selected <?php } else { ?><?php } ?> value="<?php echo $staff['id'] ?>"> <?php echo $staff['staff_name'] ?></option>
                         <?php } ?>
                     </select>
                     <label for="task">Task Name</label>
@@ -43,8 +45,7 @@
                     <label for="status">Select Status</label>
                     <select name="status_id">
                         <?php
-                        $statuses = $db->query("SELECT * FROM status")->fetchAll();
-                        foreach ($statuses as $status) : ?>
+                        foreach (getStatuses() as $status) : ?>
                             <option <?php if ($status['id'] == $datacek['status_id']) { ?> selected <?php } else { ?><?php } ?> value="<?= $status['id'] ?>"><?= $status['status'] ?></option>
                         <?php endforeach; ?>
                     </select>

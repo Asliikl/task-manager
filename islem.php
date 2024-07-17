@@ -1,19 +1,23 @@
 <?php
 require_once 'db.php';
+include 'functions.php';
 
-if (isset($_POST['insert_staff'])) {
-   $save = $db->prepare("INSERT into staff set
-    staff_name=:staff_name
-   ");
+if (isset($_POST['insert_staff']) && isset($_POST['staff_name']) && !empty($_POST['staff_name'])) {
+   $checkStaffIsExist = getStaffByName($_POST['staff_name']);
+   if ($checkStaffIsExist) {
+      header("Location:index.php?user_var=yes");
+      exit;
+   }
+   $save = $db->prepare("INSERT INTO staff SET staff_name=:staff_name");
    $insert = $save->execute(array(
-      // !!!!sağ taraf takma isim
       'staff_name' => $_POST['staff_name']
    ));
-   if ($save) {
+   if ($insert) {
       header("Location:index.php?durum=ok");
       exit();
    } else {
       header("Location:index.php?durum=no");
+      exit;
    }
 }
 
@@ -34,7 +38,6 @@ if (isset($_POST['insert_task'])) {
       if (!$isStatusExistResult || !$isStaffExistResult) {
          header("Location: index.php?status=error");
       }
-      //formda 1-2-3-4 id li gösteririp elle 999 yazar post eder. bunu önlemek için güvenliğini böyle yapman lazım
       $staff_id = $_POST['staff_id'];
       $status_id = $_POST['status_id'];
 
@@ -47,23 +50,23 @@ if (isset($_POST['insert_task'])) {
       $insert = $save_task->execute(array(
          'task_name' => $_POST['task_name'],
          'staff_id' => $_POST['staff_id'],
-         'status_id' => $_POST['status_id'],
-         'created_date' => $_POST['created_date']
+         'status_id' => $_POST['status_id']
       ));
-      if ($save_task) {
+      if ($insert) {
          header("Location:index.php?durum=ok");
          exit();
       } else {
          header("Location:index.php?durum=no");
+         exit();
       }
    } else {
-      echo "there is no such data";
+      header("Location:index.php?data=no");
+      exit();
    }
 }
 
 
 if (isset($_POST['update_task'])) {
-   //gelen staff id ve status id yi veritabanında sorgula, eğer yoksa hata verdir.
    $update_task = $db->prepare("UPDATE tasks SET
    task_name=:task_name,
    staff_id=:staff_id,
@@ -112,3 +115,6 @@ if (isset($_GET['type']) && $_GET['type'] == 'archive_task' && isset($_GET['id']
       exit();
    }
 }
+
+header("Location: index.php?islem_return=ok");
+exit();
